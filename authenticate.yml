@@ -1,0 +1,42 @@
+template: Hello, %s!
+defaultName: Stranger
+database:
+  # the name of your JDBC driver
+  driverClass: com.mysql.jdbc.Driver
+
+  # the username
+  user: $env:MYSQL_USER
+
+  # the password
+  password: $env:MYSQL_PASS
+
+  # the JDBC URL
+  url: $env:MYSQL_URL
+
+  # any properties specific to your JDBC driver:
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.MySQLDialect
+    autoReconnect: true
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyApplication Health Check */ SELECT 1"
+
+  # the minimum number of connections to keep open
+  minSize: 8
+
+  # the maximum number of connections to keep open
+  maxSize: 32
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: true
+  checkConnectionWhileIdle: true
+
+redis:
+  hostname: $env:REDIS_HOST
+  port: $env:REDIS_PORT
+  password: khkWFUaaTZcduKD78m8Xe3fTwINofMoN
+
