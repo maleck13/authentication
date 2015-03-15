@@ -1,7 +1,7 @@
-package me.web.authenticate.dao;
+package me.web.authentication.dao;
 
 import io.dropwizard.hibernate.AbstractDAO;
-import me.web.authenticate.core.Authenticate;
+import me.web.authentication.core.Authenticate;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;

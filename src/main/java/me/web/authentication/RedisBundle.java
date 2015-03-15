@@ -1,4 +1,4 @@
-package me.web.authenticate;
+package me.web.authentication;
 
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;

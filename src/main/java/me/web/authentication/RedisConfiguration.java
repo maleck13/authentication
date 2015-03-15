@@ -1,4 +1,4 @@
-package me.web.authenticate;
+package me.web.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

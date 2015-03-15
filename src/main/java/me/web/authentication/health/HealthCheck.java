@@ -1,4 +1,4 @@
-package me.web.authenticate.health;
+package me.web.authentication.health;
 
 /**
  * Created by craigbrookes on 13/03/15.

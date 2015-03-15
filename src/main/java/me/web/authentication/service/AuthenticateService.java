@@ -1,10 +1,9 @@
-package me.web.authenticate.service;
+package me.web.authentication.service;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import me.web.authenticate.core.Authenticate;
-import me.web.authenticate.dao.AuthenticateDao;
-import me.web.authenticate.json.util.JsonUtil;
+import me.web.authentication.core.Authenticate;
+import me.web.authentication.dao.AuthenticateDao;
+import me.web.authentication.json.util.JsonUtil;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package me.web.authenticate;
+package me.web.authentication;
 
 import de.thomaskrille.dropwizard.environment_configuration.EnvironmentConfigurationFactoryFactory;
 import io.dropwizard.Application;
@@ -6,14 +6,11 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import me.web.authenticate.core.Authenticate;
-import me.web.authenticate.dao.AuthenticateDao;
-import me.web.authenticate.health.HealthCheck;
-import me.web.authenticate.resources.AuthenticateResource;
-import me.web.authenticate.service.AuthenticateService;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import me.web.authentication.core.Authenticate;
+import me.web.authentication.dao.AuthenticateDao;
+import me.web.authentication.health.HealthCheck;
+import me.web.authentication.resources.AuthenticateResource;
+import me.web.authentication.service.AuthenticateService;
 
 /**
  * Created by craigbrookes on 13/03/15.
@@ -25,7 +22,7 @@ public class AuthenticateApplication extends Application<AuthenticateConfigurati
 
   @Override
   public String getName() {
-    return "authenticate";
+    return "authentication";
   }
   private final HibernateBundle<AuthenticateConfiguration> hibernate = new HibernateBundle<AuthenticateConfiguration>(Authenticate.class) {
     @Override

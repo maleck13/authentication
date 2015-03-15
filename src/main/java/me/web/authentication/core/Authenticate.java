@@ -1,4 +1,4 @@
-package me.web.authenticate.core;
+package me.web.authentication.core;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

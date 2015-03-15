@@ -1,8 +1,8 @@
-package me.web.authenticate.json.util;
+package me.web.authentication.json.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.web.authenticate.core.Authenticate;
+import me.web.authentication.core.Authenticate;
 
 import java.io.IOException;
 

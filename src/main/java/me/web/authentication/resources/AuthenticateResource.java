@@ -1,13 +1,11 @@
-package me.web.authenticate.resources;
+package me.web.authentication.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import io.dropwizard.hibernate.UnitOfWork;
-import me.web.authenticate.core.Authenticate;
-import me.web.authenticate.dao.AuthenticateDao;
-import me.web.authenticate.service.AuthenticateService;
-import redis.clients.jedis.JedisPool;
+import me.web.authentication.core.Authenticate;
+import me.web.authentication.service.AuthenticateService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
