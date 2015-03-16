@@ -6,7 +6,7 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import me.web.authentication.core.Authenticate;
+import me.web.authentication.core.Authentication;
 import me.web.authentication.dao.AuthenticateDao;
 import me.web.authentication.health.HealthCheck;
 import me.web.authentication.resources.AuthenticateResource;
@@ -24,7 +24,7 @@ public class AuthenticateApplication extends Application<AuthenticateConfigurati
   public String getName() {
     return "authentication";
   }
-  private final HibernateBundle<AuthenticateConfiguration> hibernate = new HibernateBundle<AuthenticateConfiguration>(Authenticate.class) {
+  private final HibernateBundle<AuthenticateConfiguration> hibernate = new HibernateBundle<AuthenticateConfiguration>(Authentication.class) {
     @Override
     public DataSourceFactory getDataSourceFactory(AuthenticateConfiguration configuration) {
       return configuration.getDataSourceFactory();
@@ -56,6 +56,7 @@ public class AuthenticateApplication extends Application<AuthenticateConfigurati
   public void run(AuthenticateConfiguration configuration, Environment environment) {
 
     final AuthenticateResource resource = new AuthenticateResource(getAuthenticateService());
+    System.setProperty("salt",configuration.getSalt());
     environment.jersey().register(resource);
 
     final HealthCheck health = new HealthCheck();

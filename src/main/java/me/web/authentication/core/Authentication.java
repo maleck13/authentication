@@ -6,7 +6,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Authenticate {
+@Table(name = "Authentication")
+public class Authentication {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +73,7 @@ public class Authenticate {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    Authenticate that = (Authenticate) o;
+    Authentication that = (Authentication) o;
 
     if (id != that.id) return false;
     if (!userid.equals(that.userid)) return false;

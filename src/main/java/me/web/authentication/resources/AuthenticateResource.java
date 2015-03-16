@@ -4,8 +4,10 @@ import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import io.dropwizard.hibernate.UnitOfWork;
-import me.web.authentication.core.Authenticate;
+import me.web.authentication.core.Authentication;
+import me.web.authentication.exceptions.ResourceNotFoundException;
 import me.web.authentication.service.AuthenticateService;
+import org.hibernate.exception.ConstraintViolationException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -31,10 +33,10 @@ public class AuthenticateResource {
   @GET
   @Timed
   @UnitOfWork
-  public Authenticate get(@QueryParam("name") Optional<String> name) {
-   Authenticate auth =  authenticateService.findUser(name.get());
+  public Authentication get(@QueryParam("name") Optional<String> name) {
+   Authentication auth =  authenticateService.findUser(name.get());
     if(null == auth){
-      throw new NotFoundException();
+      throw new ResourceNotFoundException();
     }
     return auth;
   }
@@ -42,8 +44,20 @@ public class AuthenticateResource {
   @POST
   @Timed
   @UnitOfWork
-  public Authenticate set(@Valid Authenticate authenticate, @Context HttpServletResponse res){
-    return authenticateService.setUp(authenticate);
+  public Authentication set(@Valid Authentication authentication, @Context HttpServletResponse res){
+      return authenticateService.setUp(authentication);
+  }
+
+  @DELETE
+  @Timed
+  @UnitOfWork
+  @Path("{id}")
+  public void delete(@PathParam("id") String id){
+    Authentication authentication = authenticateService.findUser(id);
+    if(null == authentication){
+      throw  new ResourceNotFoundException();
+    }
+    authenticateService.delete(authentication);
   }
 
   @POST
@@ -51,19 +65,25 @@ public class AuthenticateResource {
   @Timed
   @UnitOfWork
   public void validate(@Context HttpServletRequest req, @Context HttpServletResponse res){
-    String authToken = req.getHeader(XAUTH_HEADER);
-    Authenticate authenticate = new Authenticate();
+    Cookie auth = AuthenticateService.getAuthCookie(req.getCookies());
+    String authToken;
+    if(null != auth){
+      authToken = auth.getValue();
+    }else{
+      authToken = req.getHeader(XAUTH_HEADER);
+    }
+    Authentication authentication = new Authentication();
     if(null == authToken){
       ObjectMapper mapper = new ObjectMapper();
       try {
-        authenticate = mapper.readValue(req.getInputStream(), Authenticate.class);
+        authentication = mapper.readValue(req.getInputStream(), Authentication.class);
       }catch (IOException e){
-        throw new WebApplicationException(400);
+        throw new WebApplicationException(401);
       }
     }else{
-      authenticate.setAuthtoken(authToken);
+      authentication.setAuthtoken(authToken);
     }
-   Cookie c = authenticateService.validate(authenticate);
+   Cookie c = authenticateService.validate(authentication);
     res.addCookie(c);
 
   }

@@ -1,5 +1,4 @@
-template: Hello, %s!
-defaultName: Stranger
+salt: b%5n&7M(9
 database:
   # the name of your JDBC driver
   driverClass: com.mysql.jdbc.Driver
@@ -18,6 +17,7 @@ database:
     charSet: UTF-8
     hibernate.dialect: org.hibernate.dialect.MySQLDialect
     autoReconnect: true
+    hibernate.hbm2ddl.auto: create
 
   # the maximum amount of time to wait on an empty pool before throwing an exception
   maxWaitForConnection: 1s
@@ -38,5 +38,5 @@ database:
 redis:
   hostname: $env:REDIS_HOST
   port: $env:REDIS_PORT
-  password: khkWFUaaTZcduKD78m8Xe3fTwINofMoN
+  password: $env:REDIS_PASS
 

@@ -20,7 +20,10 @@ public class RedisBundle<T extends Configuration> implements ConfiguredBundle<T>
     System.out.print("starting redis");
     AuthenticateConfiguration authenticateConfiguration = (AuthenticateConfiguration) config;
     RedisConfiguration redisConfiguration = authenticateConfiguration.getRedis();
-    jedisPool = new JedisPool(new JedisPoolConfig(),redisConfiguration.getHostname(),redisConfiguration.getPort(),2000,redisConfiguration.getPassword());
+    jedisPool = new JedisPool(new JedisPoolConfig(),
+        redisConfiguration.getHostname(),
+        redisConfiguration.getPort(),2000,
+        redisConfiguration.getPassword());
 
   }
 

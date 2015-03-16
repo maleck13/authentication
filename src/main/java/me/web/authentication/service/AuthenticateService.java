@@ -1,10 +1,13 @@
 package me.web.authentication.service;
 
 
-import me.web.authentication.core.Authenticate;
+import io.dropwizard.hibernate.UnitOfWork;
+import me.web.authentication.core.Authentication;
 import me.web.authentication.dao.AuthenticateDao;
+import me.web.authentication.exceptions.UnauthorisedException;
 import me.web.authentication.json.util.JsonUtil;
 import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -13,6 +16,7 @@ import redis.clients.jedis.JedisPool;
 import javax.servlet.http.Cookie;
 import javax.ws.rs.WebApplicationException;
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -20,6 +24,7 @@ public class AuthenticateService {
 
   private AuthenticateDao authenticateDao;
   private final JedisPool jedisPool;
+
   Logger authLog = LoggerFactory.getLogger(AuthenticateService.class);
 
   public AuthenticateService(final AuthenticateDao authenticateDao, JedisPool jedis) {
@@ -27,49 +32,79 @@ public class AuthenticateService {
     this.jedisPool = jedis;
   }
 
-  public Authenticate findUser(String id){
-    Authenticate auth = authenticateDao.findByUserId(id);
+  public Authentication findUser(String id){
+    Authentication auth = authenticateDao.findByUserId(id);
     if(null == auth){
       auth = authenticateDao.findUserByAuthToken(id);
     }
     return auth;
   }
 
-  public Authenticate setUp(Authenticate authenticate){
+  public String hashPassword(String pass)throws Exception{
+    String salt = System.getProperty("salt");
+    MessageDigest m = MessageDigest.getInstance("SHA-256");
+    String sb = salt + pass + salt + salt;
+    m.update(sb.getBytes());
+    return javax.xml.bind.DatatypeConverter.printHexBinary(m.digest());
+  }
+
+  public Authentication setUp(Authentication authentication){
     try {
-      return authenticateDao.createUpdate(authenticate);
-    }catch (HibernateException e){
+      String hashed =  hashPassword(authentication.getPassword());
+      authentication.setPassword(hashed);
+      return authenticateDao.createUpdate(authentication);
+    }catch(ConstraintViolationException e){
       throw new WebApplicationException(409);
+    }catch (Exception  ex){
+      throw new WebApplicationException(500);
     }
   }
 
-  public Cookie validate(Authenticate authenticate){
-    Authenticate auth = null;
+  public void delete(Authentication authentication){
+
+  }
+
+  public static Cookie getAuthCookie(Cookie[] cookies){
+    for(Cookie c : cookies){
+      if(c.getName().equals("auth")){
+        return c;
+      }
+    }
+    return null;
+  }
+
+  public Cookie validate(Authentication authentication){
+    Authentication auth = null;
     Cookie c;
-    if(null != authenticate.getUserid() && null != authenticate.getPassword()) {
-      auth = findUser(authenticate.getUserid());
-    }else if(null != authenticate.getAuthtoken()){
+    if(null != authentication.getUserid() && null != authentication.getPassword()) {
+      auth = findUser(authentication.getUserid());
+    }else if(null != authentication.getAuthtoken()){
       try {
         Jedis redis = jedisPool.getResource();
-        String redisSession = redis.get(authenticate.getAuthtoken());
+        String redisSession = redis.get(authentication.getAuthtoken());
         if(null != redisSession) {
           auth = JsonUtil.fromJSON(redisSession);
-          redis.setex(authenticate.getAuthtoken(), 60 * 60, JsonUtil.toJSON(auth));
-          c = new Cookie("auth",authenticate.getAuthtoken());
+          redis.setex(authentication.getAuthtoken(), 60 * 60, JsonUtil.toJSON(auth));
+          c = new Cookie("auth", authentication.getAuthtoken());
           return c;
         }
 
       }catch (Exception e){
         authLog.warn("failed redis or json issue ",e);
-        throw new WebApplicationException(401); //just get them to relogin
+        throw new UnauthorisedException(); //just get them to relogin
       }
     }
 
     if(null == auth){
-      throw new WebApplicationException(401);
+      throw new UnauthorisedException();
     }
-
-    if(auth.getPassword().equals(authenticate.getPassword())){
+    String hashed;
+    try {
+      hashed = hashPassword(authentication.getPassword());
+    }catch (Exception e){
+      throw new WebApplicationException(500);
+    }
+    if(auth.getPassword().equals(hashed) && auth.getUserid().equals(authentication.getUserid())){
       Calendar cal = Calendar.getInstance();
       cal.add(Calendar.DAY_OF_YEAR,5);
       String authId = UUID.randomUUID().toString();
@@ -86,7 +121,7 @@ public class AuthenticateService {
       return c;
     }
     else{
-      throw new WebApplicationException(401);
+      throw new UnauthorisedException();
     }
   }
 }
