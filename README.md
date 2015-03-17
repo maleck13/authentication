@@ -5,10 +5,12 @@ authentication microservice built using dropwizard
 mysql
 redis
 
-#env vars
-MYSQL_DATABASE
-MYSQL_USER
-MYSQL_PASSWORD
-REDIS_HOST
-REDIS_PORT
-REDIS_PASS
+#env vars mysql
+- MYSQL_URL in format jdbc:mysql://MYSQL_HOST/authentication
+- MYSQL_USER
+- MYSQL_PASSWORD
+
+#env vars redis
+- REDIS_HOST
+- REDIS_PORT
+- REDIS_PASS
