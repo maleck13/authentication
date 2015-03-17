@@ -1,5 +1,5 @@
 # authentication
-authentication microservice built using dropwizard
+authentication microservice built using dropwizard. Used for photomap.me
 
 # requires
 mysql
