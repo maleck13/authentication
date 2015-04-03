@@ -1,12 +1,14 @@
 package me.web.authentication.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "Authentication")
+@Table(name = "authentication")
 public class Authentication {
 
   @Id
@@ -44,10 +46,12 @@ public class Authentication {
     this.userid = username;
   }
 
+  @JsonIgnore
   public String getPassword() {
     return password;
   }
 
+  @JsonProperty
   public void setPassword(String password) {
     this.password = password;
   }

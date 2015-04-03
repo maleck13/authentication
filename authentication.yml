@@ -1,4 +1,11 @@
-salt: b%5n&7M(9
+pepper: b%5n&7M(9Fn1PP)Xf5^nLaR38O0WqQ:<JiV4
+loginValid: 3 #days
+
+server:
+  applicationConnectors:
+  - type: http
+    port: 9000
+
 database:
   # the name of your JDBC driver
   driverClass: com.mysql.jdbc.Driver

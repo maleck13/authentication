@@ -12,8 +12,12 @@ import javax.validation.constraints.NotNull;
 public class AuthenticateConfiguration extends Configuration{
 
   @NotEmpty
-  @JsonProperty("salt")
-  private String salt;
+  @JsonProperty("pepper")
+  private String pepper;
+
+  @NotNull
+  @JsonProperty("loginValid")
+  private int loginValid;
 
   @Valid
   @NotNull
@@ -34,7 +38,11 @@ public class AuthenticateConfiguration extends Configuration{
     return redis;
   }
 
-  public String getSalt(){
-    return  salt;
+  public String getPepper(){
+    return  pepper;
+  }
+
+  public int getLoginValid(){
+    return loginValid;
   }
 }

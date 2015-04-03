@@ -33,7 +33,7 @@ public class TestAuthenticationResource {
 
   @Test
   public void testGetPerson() {
-    assertThat(resources.client().target("/authentication?name=test@test.com").request().get(Authentication.class))
+    assertThat(resources.client().target("/authentication?userid=test@test.com").request().get(Authentication.class))
         .isEqualTo(auth);
     verify(authService).findUser("test@test.com");
   }
