@@ -72,23 +72,5 @@ public class Authentication {
     this.valid = valid;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
 
-    Authentication that = (Authentication) o;
-
-    if (id != that.id) return false;
-    if (!userid.equals(that.userid)) return false;
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
-    result = 31 * result + userid.hashCode();
-    return result;
-  }
 }

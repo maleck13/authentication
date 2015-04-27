@@ -11,11 +11,6 @@ import me.web.authentication.dao.AuthenticateDao;
 import me.web.authentication.health.HealthCheck;
 import me.web.authentication.resources.AuthenticateResource;
 import me.web.authentication.service.AuthenticateService;
-import mousio.etcd4j.EtcdClient;
-import mousio.etcd4j.promises.EtcdResponsePromise;
-import mousio.etcd4j.requests.EtcdKeyGetRequest;
-
-import java.net.URI;
 
 /**
  * Created by craigbrookes on 13/03/15.
@@ -51,11 +46,7 @@ public class AuthenticateApplication extends Application<AuthenticateConfigurati
     return new AuthenticateDao(hibernate.getSessionFactory());
   }
 
-  public EtcdClient getEtcdClient(){
-    EtcdClient etcd = new EtcdClient(URI.create("http://192.168.33.12:8001"));
-    return etcd;
 
-  }
 
   public AuthenticateService getAuthenticateService(){
     return new AuthenticateService(getAuthenticateDao(),redis.getJedisPool());
