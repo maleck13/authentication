@@ -12,9 +12,7 @@ import me.web.authentication.health.HealthCheck;
 import me.web.authentication.resources.AuthenticateResource;
 import me.web.authentication.service.AuthenticateService;
 
-/**
- * Created by craigbrookes on 13/03/15.
- */
+
 public class AuthenticateApplication extends Application<AuthenticateConfiguration> {
   private final HibernateBundle<AuthenticateConfiguration> hibernate = new HibernateBundle<AuthenticateConfiguration>(Authentication.class) {
     @Override
@@ -22,7 +20,7 @@ public class AuthenticateApplication extends Application<AuthenticateConfigurati
       return configuration.getDataSourceFactory();
     }
   };
-  private final RedisBundle<AuthenticateConfiguration> redis = new RedisBundle<AuthenticateConfiguration>();
+
 
   public static void main(String[] args) throws Exception {
     new AuthenticateApplication().run(args);
@@ -35,10 +33,8 @@ public class AuthenticateApplication extends Application<AuthenticateConfigurati
 
   @Override
   public void initialize(Bootstrap<AuthenticateConfiguration> bootstrap) {
-    // nothing to do yet
     bootstrap.setConfigurationFactoryFactory(new EnvironmentConfigurationFactoryFactory<AuthenticateConfiguration>());
     bootstrap.addBundle(hibernate);
-    bootstrap.addBundle(redis);
   }
 
 
@@ -49,7 +45,7 @@ public class AuthenticateApplication extends Application<AuthenticateConfigurati
 
 
   public AuthenticateService getAuthenticateService(){
-    return new AuthenticateService(getAuthenticateDao(),redis.getJedisPool());
+    return new AuthenticateService(getAuthenticateDao());
   }
 
 
@@ -65,15 +61,5 @@ public class AuthenticateApplication extends Application<AuthenticateConfigurati
 
     final HealthCheck health = new HealthCheck();
     environment.healthChecks().register("sys",health);
-//    EtcdClient client = getEtcdClient();
-//    try {
-//      EtcdResponsePromise res = client.post("test","test").send();
-//      res.get();
-//
-//    }catch (Exception e){
-//      e.printStackTrace();
-//    }
-
-    //todo add redis health check
   }
 }

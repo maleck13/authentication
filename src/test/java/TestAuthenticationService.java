@@ -17,22 +17,18 @@ public class TestAuthenticationService {
   private AuthenticateService authenticateService;
 
   private AuthenticateDao authenticateDao = mock(AuthenticateDao.class);
-  private JedisPool jedisPool = mock(JedisPool.class);
-  private  Jedis jedis = mock(Jedis.class);
   private Authentication auth;
   private static final String AUTH_NAME = "test@test.com";
   private static final String AUTH_TOKEN = "testtoken";
 
   @Before
   public void setUp(){
-    authenticateService = new AuthenticateService(authenticateDao,jedisPool);
+    authenticateService = new AuthenticateService(authenticateDao);
     auth = new Authentication();
     auth.setId(1);
     auth.setUserid(AUTH_NAME);
     auth.setPassword("password");
     auth.setAuthtoken(AUTH_TOKEN);
-    when(jedisPool.getResource()).thenReturn(jedis);
-
   }
 
   @Test
@@ -76,7 +72,6 @@ public class TestAuthenticationService {
   public  void testValidateUserAuthToken()throws Exception{
     Authentication authentication = new Authentication();
     authentication.setAuthtoken(AUTH_TOKEN);
-    when(jedis.get(anyString())).thenReturn("{}");
     when(authenticateDao.findByUserId(anyString())).thenReturn(authentication);
     Authentication authentication1 = authenticateService.validate(authentication);
     Assert.assertNotNull(authentication1);
@@ -91,7 +86,6 @@ public class TestAuthenticationService {
     Authentication authentication = new Authentication();
     authentication.setAuthtoken("invalid");
     when(authenticateDao.findByUserId(anyString())).thenReturn(authentication);
-    when(jedis.get(anyString())).thenReturn(null);
     Authentication authentication1  = authenticateService.validate(authentication);
     Assert.fail();
   }

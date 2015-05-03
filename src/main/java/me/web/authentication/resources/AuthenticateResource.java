@@ -19,6 +19,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.Enumeration;
 
 
 @Path("/authentication")
@@ -112,10 +113,16 @@ public class AuthenticateResource {
       authentication.setUserid(userId);
       log.info("user and token from cookie " +  userId + " " + authToken);
     }else{
+
       authToken = req.getHeader(XAUTH_HEADER);
       userId = req.getHeader(XAUTH_ID_HEADER);
       authentication.setAuthtoken(authToken);
       authentication.setUserid(userId);
+      Enumeration<String> hs = req.getHeaderNames();
+      while(hs.hasMoreElements()){
+        log.info("headname " + hs.nextElement());
+      }
+      log.info("auth " + authentication.toString());
     }
 
     if(null == authToken){

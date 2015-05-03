@@ -42,8 +42,4 @@ database:
   checkConnectionWhileIdle: true
   checkConnectionWhileIdle: true
 
-redis:
-  hostname: $env:REDIS_HOST
-  port: $env:REDIS_PORT
-  password: $env:REDIS_PASS
 

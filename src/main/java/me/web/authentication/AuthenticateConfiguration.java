@@ -29,14 +29,6 @@ public class AuthenticateConfiguration extends Configuration{
     return database;
   }
 
-  @Valid
-  @NotNull
-  @JsonProperty
-  private  RedisConfiguration redis = new RedisConfiguration();
-
-  public RedisConfiguration getRedis(){
-    return redis;
-  }
 
   public String getPepper(){
     return  pepper;

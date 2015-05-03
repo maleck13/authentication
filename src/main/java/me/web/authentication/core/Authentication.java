@@ -72,5 +72,12 @@ public class Authentication {
     this.valid = valid;
   }
 
-
+  @Override
+  public String toString() {
+    return "Authentication{" +
+        "userid='" + userid + '\'' +
+        ", password='" + password + '\'' +
+        ", authtoken='" + authtoken + '\'' +
+        '}';
+  }
 }

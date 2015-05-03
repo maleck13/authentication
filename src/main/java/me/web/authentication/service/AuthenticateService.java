@@ -9,7 +9,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.JedisPool;
 
 import javax.servlet.http.Cookie;
 import javax.ws.rs.WebApplicationException;
@@ -21,13 +20,12 @@ import java.util.UUID;
 public class AuthenticateService {
 
   private AuthenticateDao authenticateDao;
-  private final JedisPool jedisPool;
+
 
   Logger authLog = LoggerFactory.getLogger(AuthenticateService.class);
 
-  public AuthenticateService(final AuthenticateDao authenticateDao, JedisPool jedis) {
+  public AuthenticateService(final AuthenticateDao authenticateDao) {
     this.authenticateDao = authenticateDao;
-    this.jedisPool = jedis;
   }
 
   public Authentication findUser(String id){
