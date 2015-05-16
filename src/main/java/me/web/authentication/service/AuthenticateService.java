@@ -15,6 +15,7 @@ import javax.ws.rs.WebApplicationException;
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class AuthenticateService {
@@ -36,6 +37,10 @@ public class AuthenticateService {
       auth = authenticateDao.findUserByAuthToken(id);
     }
     return auth;
+  }
+
+  public List<Authentication> authenticationList(){
+    return authenticateDao.findAll();
   }
 
   public String hashPassword(String pass)throws Exception{

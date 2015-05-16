@@ -1,6 +1,7 @@
 package me.web.authentication.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "authentication")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Authentication {
 
   @Id

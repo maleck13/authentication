@@ -2,7 +2,6 @@ package me.web.authentication.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Optional;
 import io.dropwizard.hibernate.UnitOfWork;
 import me.web.authentication.core.Authentication;
 import me.web.authentication.exceptions.ResourceNotFoundException;
@@ -20,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.List;
 
 
 @Path("/authentication")
@@ -38,15 +38,21 @@ public class AuthenticateResource {
   @GET
   @Timed
   @UnitOfWork
-  public Authentication get(@QueryParam("userid") Optional<String> name) {
-   if(!name.isPresent()){
-     throw new WebApplicationException("userid required",400);
-   }
-   Authentication auth =  authenticateService.findUser(name.get());
+  @Path("{id}")
+  public Authentication get(@PathParam("id") String name) {
+
+   Authentication auth =  authenticateService.findUser(name);
     if(null == auth){
       throw new ResourceNotFoundException();
     }
     return auth;
+  }
+
+  @GET
+  @Timed
+  @UnitOfWork
+  public List<Authentication> list(){
+    return authenticateService.authenticationList();
   }
 
   @POST
@@ -129,6 +135,7 @@ public class AuthenticateResource {
       ObjectMapper mapper = new ObjectMapper();
       try {
         authentication = mapper.readValue(req.getInputStream(), Authentication.class);
+        log.info("auth from body: " + authentication.toString());
       }catch (IOException e){
         throw new WebApplicationException(401);
       }

@@ -7,6 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
+import java.util.List;
+
 
 public class AuthenticateDao extends AbstractDAO<Authentication> {
 
@@ -36,5 +38,10 @@ public class AuthenticateDao extends AbstractDAO<Authentication> {
     Criteria criteria = this.criteria();
     criteria.add(Restrictions.eq("authtoken",token));
     return uniqueResult(criteria);
+  }
+
+  public List<Authentication> findAll(){
+    Criteria criteria = this.criteria();
+    return list(criteria);
   }
 }
