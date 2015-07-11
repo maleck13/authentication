@@ -17,7 +17,7 @@ database:
   password: $env:MYSQL_PASS
 
   # the JDBC URL
-  url: $env:MYSQL_URL
+  url: mysql://authenticationdb/authentication
 
   # any properties specific to your JDBC driver:
   properties:
